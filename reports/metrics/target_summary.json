@@ -1,0 +1,19 @@
+{
+  "rows": 476307,
+  "unique_players": 30637,
+  "min_valuation_date": "2000-01-20",
+  "max_valuation_date": "2025-12-19",
+  "min_next_valuation_date": "2004-10-04",
+  "max_next_valuation_date": "2026-02-27",
+  "min_days_to_next_valuation": 1,
+  "median_days_to_next_valuation": 168.0,
+  "max_days_to_next_valuation": 5862,
+  "target_min": 10000.0,
+  "target_median": 600000.0,
+  "target_mean": 2677953.313722032,
+  "target_max": 200000000.0,
+  "log_target_min": 9.210440366976517,
+  "log_target_median": 13.304686600863562,
+  "log_target_mean": 13.466719937308474,
+  "log_target_max": 19.11382792951231
+}

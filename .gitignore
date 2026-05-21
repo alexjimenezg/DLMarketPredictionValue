@@ -1,0 +1,61 @@
+# ---- Entornos virtuales ----
+venv/
+.venv/
+env/
+ENV/
+
+# ---- Cachés de Python ----
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# ---- Jupyter ----
+.ipynb_checkpoints/
+*-checkpoint.ipynb
+
+# ---- Datos: raw e intermedios no se versionan (regenerables) ----
+data/raw/*
+data/interim/*
+!data/raw/.gitkeep
+!data/interim/.gitkeep
+
+# Si el .parquet final pesa demasiado para GitHub (>100 MB),
+# descomenta también la línea siguiente y publica el dataset final
+# en Google Drive / Kaggle / Zenodo, e indica el enlace en el README.
+# data/processed/*
+# !data/processed/.gitkeep
+
+# ---- Distribución / build ----
+build/
+dist/
+*.egg-info/
+*.egg
+
+# ---- Configuración local de IDEs / herramientas ----
+.idea/
+.vscode/
+.claude/
+*.swp
+*.swo
+
+# ---- Streamlit ----
+.streamlit/secrets.toml
+
+# ---- Sistema operativo ----
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ---- Logs y artefactos temporales ----
+*.log
+*.tmp
+*.bak
+
+# ---- TensorFlow / Keras temporales ----
+logs/
+tb_logs/

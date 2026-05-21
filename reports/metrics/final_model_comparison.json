@@ -1,0 +1,158 @@
+{
+  "project": "MarketScout DL",
+  "date_generated": "2024-05-10",
+  "test_set_size": 24139,
+  "temporal_split": {
+    "train_date_max": "2021-12-31",
+    "val_date_min": "2022-01-01",
+    "val_date_max": "2023-12-31",
+    "test_date_min": "2024-01-03"
+  },
+  "test_metrics": {
+    "previous_value": {
+      "mae_log": 0.216,
+      "r2_log": 0.956,
+      "mae_eur_millions": 0.90,
+      "median_absolute_percentage_error": 16.7,
+      "model_type": "baseline",
+      "description": "No-change: predict current log_market_value as next"
+    },
+    "histgradientboosting": {
+      "mae_log": 0.209,
+      "r2_log": 0.966,
+      "mae_eur_millions": 1.04,
+      "median_absolute_percentage_error": 14.3,
+      "model_type": "gradient_boosting",
+      "description": "Scikit-learn HistGradientBoostingRegressor on numeric features"
+    },
+    "mlp_numeric_direct": {
+      "mae_log": 0.296,
+      "r2_log": 0.937,
+      "mae_eur_millions": 0.61,
+      "median_absolute_percentage_error": 22.7,
+      "model_type": "deep_learning",
+      "description": "Keras MLP predicting log_next_market_value directly"
+    },
+    "mlp_residual": {
+      "mae_log": 0.205,
+      "r2_log": 0.965,
+      "mae_eur_millions": 0.81,
+      "median_absolute_percentage_error": 13.4,
+      "model_type": "deep_learning",
+      "description": "Keras MLP predicting residual delta (recommended)",
+      "is_recommended": true
+    }
+  },
+  "winner_by_metric": {
+    "mae_log": {
+      "winner": "mlp_residual",
+      "value": 0.205,
+      "note": "Lower is better; MAE in log-space captures relative error"
+    },
+    "r2_log": {
+      "winner": "histgradientboosting",
+      "value": 0.966,
+      "runner_up": "mlp_residual",
+      "runner_up_value": 0.965,
+      "difference_percent": 0.1,
+      "note": "Negligible difference (<0.1%)"
+    },
+    "median_absolute_percentage_error": {
+      "winner": "mlp_residual",
+      "value": 13.4,
+      "note": "Lower is better; robust to outliers"
+    },
+    "mae_eur_millions": {
+      "winner": "mlp_numeric_direct",
+      "value": 0.61,
+      "note": "Distorted by outlier valuations; not primary metric"
+    }
+  },
+  "overall_recommendation": {
+    "primary_model": "mlp_residual",
+    "rationale": [
+      "Best MAE in log-space (0.205) — most reliable metric",
+      "Best median absolute percentage error (13.4%) — robust to outliers",
+      "Negligible R² difference vs HistGB (<0.1%)",
+      "Interpretable: predicts change relative to current value",
+      "Aligns model objective with strongest baseline (no-change at residual=0)",
+      "Better generalization than direct MLP through residual formulation"
+    ],
+    "alternative_model": "histgradientboosting",
+    "alternative_rationale": [
+      "Marginally best R² (0.966)",
+      "Slightly lower MAE_log (0.209 vs 0.205) but within noise",
+      "Feature importance (SHAP) interpretability for regulatory compliance",
+      "Faster inference and training"
+    ],
+    "not_recommended": [
+      "mlp_numeric_direct: Underperforms all metrics except EUR scale",
+      "previous_value: Use as monitoring baseline only"
+    ]
+  },
+  "validation_set_metrics": {
+    "note": "Validation results shown for reference; similar to test indicates good generalization",
+    "previous_value": {
+      "mae_log": 0.213,
+      "r2_log": 0.957,
+      "median_absolute_percentage_error": 16.4
+    },
+    "histgradientboosting": {
+      "mae_log": 0.206,
+      "r2_log": 0.967,
+      "median_absolute_percentage_error": 13.8
+    },
+    "mlp_residual": {
+      "mae_log": 0.202,
+      "r2_log": 0.966,
+      "median_absolute_percentage_error": 13.1
+    }
+  },
+  "production_deployment": {
+    "recommended_model": "mlp_residual",
+    "file_artifacts": [
+      "models/mlp_residual.keras",
+      "models/residual_dl_preprocessor.joblib"
+    ],
+    "inference_pipeline": {
+      "step_1": "Load preprocessor and model",
+      "step_2": "Preprocess input features (median impute, StandardScaler)",
+      "step_3": "Call model.predict(features) to get pred_residual",
+      "step_4": "Compute pred_log_next = log_market_value + pred_residual",
+      "step_5": "Convert to EUR: pred_next_eur = expm1(pred_log_next)",
+      "step_6": "Return prediction ± uncertainty interval (optional Bayesian dropout)"
+    },
+    "monitoring": {
+      "monthly_retraining": true,
+      "drift_alert_threshold": 0.02,
+      "fallback_model": "histgradientboosting",
+      "performance_metrics": ["mae_log", "median_absolute_percentage_error", "r2_log"]
+    }
+  },
+  "methodology_notes": {
+    "target_variable": "log_next_market_value = log1p(next_market_value_in_eur)",
+    "temporal_causality": "Strictly historical; all features computed with game_date < valuation_date",
+    "no_shuffling": "Temporal split preserves chronological order (2008->2021->2022-2023->2024+)",
+    "residual_learning": {
+      "definition": "y_residual = log_next_market_value - log_market_value",
+      "purpose": "Frame problem as competitive with no-change baseline; focus capacity on predictable changes",
+      "final_prediction": "log_next = log_market_value + pred_residual"
+    },
+    "feature_count": 58,
+    "feature_categories": [
+      "Player profile (age, position, foot, height, contract)",
+      "Performance windows (90/180/365 days: appearances, minutes, goals, assists, ratios)",
+      "Club context (squad size, average age, stadium, transfers)",
+      "Competition context (league, confederation, type)",
+      "Current valuation (market_value_in_eur, log_market_value)"
+    ]
+  },
+  "limitations": {
+    "data_source": "Transfermarkt valuations are estimates, not real transfer prices",
+    "geographic_bias": "Top-5 European leagues well-covered; others sparse",
+    "performance_gaps": "No advanced stats (xG, xA); no injury/suspension flags",
+    "categorical_encoding": "One-hot encoding used; player/club/position embeddings would be more efficient",
+    "club_features": "Snapshots at valuation date, not rolling windows",
+    "player_heterogeneity": "No separate models per position; may underperform for specific roles"
+  }
+}

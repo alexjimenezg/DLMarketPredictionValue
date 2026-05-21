@@ -1,0 +1,13 @@
+# Add Python dependencies here
+pandas
+numpy
+scikit-learn
+matplotlib
+seaborn
+tensorflow-cpu
+keras
+jupyter
+kagglehub
+pyarrow
+joblib
+streamlit

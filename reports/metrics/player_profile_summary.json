@@ -1,0 +1,72 @@
+{
+  "rows": 476307,
+  "unique_players": 30637,
+  "min_valuation_date": "2000-01-20",
+  "max_valuation_date": "2025-12-19",
+  "missing_player_name_pct": 0.0,
+  "missing_age_at_valuation_pct": 0.12,
+  "min_age_at_valuation": 11.96,
+  "median_age_at_valuation": 24.7,
+  "max_age_at_valuation": 44.9,
+  "age_bucket_counts": {
+    "22-25": 150394,
+    "18-21": 124477,
+    "26-29": 112806,
+    "30-33": 61210,
+    "34+": 17176,
+    "U18": 9674
+  },
+  "position_counts": {
+    "Defender": 154550,
+    "Midfield": 138495,
+    "Attack": 131989,
+    "Goalkeeper": 50568,
+    "Missing": 705
+  },
+  "sub_position_top_20": {
+    "Centre-Back": 87063,
+    "Centre-Forward": 70095,
+    "Central Midfield": 53865,
+    "Goalkeeper": 50568,
+    "Defensive Midfield": 42393,
+    "Right-Back": 34615,
+    "Attacking Midfield": 33130,
+    "Left-Back": 32872,
+    "Left Winger": 29224,
+    "Right Winger": 28614,
+    "Left Midfield": 4797,
+    "Right Midfield": 4310,
+    "Second Striker": 4056
+  },
+  "foot_counts": {
+    "right": 328141,
+    "left": 113959,
+    "both": 22046
+  },
+  "country_top_20": {
+    "Spain": 34171,
+    "Italy": 29926,
+    "Germany": 25968,
+    "Brazil": 24518,
+    "France": 23495,
+    "Russia": 21839,
+    "Netherlands": 17858,
+    "Turkey": 16357,
+    "England": 16142,
+    "Ukraine": 16000,
+    "Portugal": 14943,
+    "Denmark": 14084,
+    "Greece": 13656,
+    "Belgium": 12683,
+    "Argentina": 11898,
+    "Türkiye": 8869,
+    "Scotland": 8206,
+    "Serbia": 7555,
+    "Croatia": 6198,
+    "Sweden": 5502
+  },
+  "missing_height_pct": 1.95,
+  "median_height_in_cm": 183.0,
+  "contract_available_pct": 62.55,
+  "contract_expired_pct": 0.02
+}
