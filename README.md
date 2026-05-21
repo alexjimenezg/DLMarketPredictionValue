@@ -23,11 +23,11 @@ MarketScout DL es un sistema de aprendizaje automático que predice el **siguien
 
 ## 2. Planteamiento del problema
 
-Dado un registro de valoración `(player_id, valuation_date)` en el instante $t$, el objetivo es predecir el valor de mercado del jugador en la **siguiente** valoración registrada $t + \Delta t$:
+Dado un registro de valoración `(player_id, valuation_date)` en el instante *t*, el objetivo es predecir el valor de mercado del jugador en la **siguiente** valoración registrada *t + Δt*:
 
-$$
-y = \log\!\bigl(1 + \text{next\_market\_value\_in\_eur}\bigr)
-$$
+```
+y = log(1 + next_market_value_in_eur)
+```
 
 Se trata, por tanto, de una **regresión temporal** sobre el logaritmo del valor. La transformación `log1p`:
 
@@ -153,15 +153,12 @@ Para evitar fuga temporal se utiliza un *split* estrictamente cronológico:
 
 Reformula el problema como predicción del **delta** en espacio logarítmico:
 
-$$
-y_{\text{residual}} = \log(\text{next\_value}) - \log(\text{current\_value})
-$$
+```
+y_residual           = log(next_value) - log(current_value)
+log(next)_predicho   = log(current)    + y_residual_predicho
+```
 
-$$
-\widehat{\log(\text{next})} = \log(\text{current}) + \hat{y}_{\text{residual}}
-$$
-
-Esto convierte a la línea base *no-change* en el caso trivial $\hat{y}=0$, lo que obliga al modelo a centrarse exclusivamente en patrones que **predicen el cambio**.
+Esto convierte a la línea base *no-change* en el caso trivial `y_residual = 0`, lo que obliga al modelo a centrarse exclusivamente en patrones que **predicen el cambio**.
 
 Arquitectura más pequeña y regularizada:
 
